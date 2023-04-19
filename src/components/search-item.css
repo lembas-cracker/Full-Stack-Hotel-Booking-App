@@ -54,28 +54,28 @@
     font-weight: bold;
 }
 
-.siCancelOpSubtitle {
+.si-cancel-op-subtitle {
     font-size: 12px;
     color: #008009;
 }
 
-.siDetails {
+.si-details {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between
 }
 
-.siRating {
+.si-rating {
     display: flex;
     justify-content: space-between
 }
 
-.siRating>span {
+.si-rating>span {
     font-weight: 500;
 }
 
-.siRating>button {
+.si-rating>button {
     background-color: #003580;
     color: white;
     padding: 5px;
@@ -83,23 +83,23 @@
     border: none;
 }
 
-.siDetailTexts {
+.si-detail-texts {
     text-align: right;
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.siPrice {
+.si-price {
     font-size: 24px;
 }
 
-.siTaxOp {
+.si-tax-op {
     font-size: 12px;
     color: gray;
 }
 
-.siCheckButton {
+.si-check-button {
     background-color: #0071c2;
     color: white;
     font-weight: bold;

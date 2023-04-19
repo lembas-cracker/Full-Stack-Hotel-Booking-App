@@ -3,11 +3,11 @@ import './search-item.css'
 const SearchItem = () => {
     return (
         <div className='search-item'>
-            <img src="" alt="" className="si-img" />
-            <div className="se-desc">
+            <img src="https://cf.bstatic.com/xdata/images/hotel/square600/261707778.webp?k=fa6b6128468ec15e81f7d076b6f2473fa3a80c255582f155cae35f9edbffdd78&o=&s=1" alt="" className="si-img" />
+            <div className="si-desc">
                 <h1 className="si-title">Tower Street Apartments</h1>
                 <span className="si-distance">500m from center</span>
-                <span className="si-taxi">Free airport taxi</span>
+                <span className="si-taxi-op">Free airport taxi</span>
                 <span className="si-subtitle">Studio Apartment with Air conditioning</span>
                 <span className="si-features">Entire studio • 1 bathroom • 21m² 1 full bed</span>
                 <span className="si-cancel-op">Free cancellation </span>
@@ -22,8 +22,8 @@ const SearchItem = () => {
                 </div>
                 <div className="si-detail-texts">
                     <span className="si-price">$112</span>
-                    <span className="sitax-op">Includes taxes and fees</span>
-                    <button className="si-checkbutton">See availability</button>
+                    <span className="si-taxi-op">Includes taxes and fees</span>
+                    <button className="si-check-button">See availability</button>
                 </div>
             </div>
         </div>
