@@ -86,10 +86,12 @@ const Header = ({ type }) => {
                         <h1 className="header-title">A lifetime of discounts? Genius!</h1>
                         <p className="header-description">Get rewarded for your travels – unlock instant savings of 10% or
                             more with a free Bookit account</p>
-                        <button className="header-btn">Sign in / Register</button>
+                        <button className="header-signIn-btn">Sign in / Register</button>
 
 
                         <div className="header-search">
+
+
                             <div className="header-search-item">
                                 <FontAwesomeIcon icon={faBed} className="header-icon" />
                                 <input

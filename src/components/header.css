@@ -41,20 +41,35 @@
 .header-btn {
     background-color: #0071c2;
     color: white;
-    padding: 10px;
-    border: none;
+    padding: 12px 16px;
+    border-radius: 4px;
+    border: 5px solid #febb02;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 20px;
 }
+
+.header-signIn-btn {
+    background-color: #0071c2;
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    border-color: #0071c2;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+}
+
 
 .header-search {
     height: 30px;
     background-color: white;
-    border: 3px solid #febb02;
+    border: 5px solid #febb02;
+    border-right: 0.5px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    padding: 10px 0px;
+    justify-content: space-between;
+    padding: 10px 0 10px 15px;
     border-radius: 5px;
     position: absolute;
     bottom: -25px;
@@ -63,7 +78,7 @@
 }
 
 .header-icon {
-    color: lightgray;
+    color: #6b6b6b;
 }
 
 .header-search-item {
@@ -72,9 +87,14 @@
     gap: 10px;
 }
 
+.header-search-item:nth-child(1) {
+    margin-left: 25px;
+}
+
 .header-search-input {
     border: none;
     outline: none;
+    font-size: 17px;
 }
 
 .header-search-text {
@@ -85,6 +105,7 @@
 .date {
     position: absolute;
     top: 50px;
+    z-index: 2;
 }
 
 .options {
@@ -95,6 +116,7 @@
     border-radius: 5px;
     -webkit-box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.4);
     box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.4);
+    z-index: 2;
 }
 
 .option-item {
