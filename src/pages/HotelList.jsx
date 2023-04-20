@@ -18,13 +18,12 @@ const HotelList = () => {
     const [date, setDate] = useState(location.state.date)
     const [openDate, setOpenDate] = useState(false)
     const [options, setOptions] = useState(location.state.options)
-    const [openOptions, setOpenOptions] = useState(false)
 
 
     const dateRef = useRef()
     useOutside(dateRef, useCallback(() => setOpenDate(false), []))
     const optionsRef = useRef()
-    useOutside(optionsRef, useCallback(() => setOpenOptions(false), []))
+    useOutside(optionsRef, useCallback(() => setOptions(false), []))
 
 
     return (
