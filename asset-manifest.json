@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/Bookit-Hotel-App/static/css/main.9d6a853a.css",
-    "main.js": "/Bookit-Hotel-App/static/js/main.6f8e14cf.js",
-    "index.html": "/Bookit-Hotel-App/index.html",
-    "main.9d6a853a.css.map": "/Bookit-Hotel-App/static/css/main.9d6a853a.css.map",
-    "main.6f8e14cf.js.map": "/Bookit-Hotel-App/static/js/main.6f8e14cf.js.map"
+    "main.css": "/Full-stack-hotel-booking-app/static/css/main.9d6a853a.css",
+    "main.js": "/Full-stack-hotel-booking-app/static/js/main.6f8e14cf.js",
+    "index.html": "/Full-stack-hotel-booking-app/index.html",
+    "main.9d6a853a.css.map": "/Full-stack-hotel-booking-app/static/css/main.9d6a853a.css.map",
+    "main.6f8e14cf.js.map": "/Full-stack-hotel-booking-app/static/js/main.6f8e14cf.js.map"
   },
   "entrypoints": [
     "static/css/main.9d6a853a.css",
