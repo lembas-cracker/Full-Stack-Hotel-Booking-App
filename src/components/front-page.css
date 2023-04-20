@@ -5,6 +5,7 @@
     justify-content: space-between;
     gap: 20px;
     z-index: 1;
+    margin-left: 20px;
 }
 
 .front-page-item {
@@ -18,10 +19,12 @@
 .front-page-img {
     width: 100%;
     object-fit: cover;
+    cursor: pointer;
 }
 
 .front-page-title {
     position: absolute;
     bottom: 20px;
     left: 20px;
+    cursor: pointer;
 }
