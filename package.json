@@ -1,7 +1,7 @@
 {
   "name": "react-booking-app",
   "version": "0.1.0",
-  "homepage": "https://lembas-cracker.github.io/Bookit-Hotel-App",
+  "homepage": "https://lembas-cracker.github.io/Full-stack-hotel-booking-app",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
