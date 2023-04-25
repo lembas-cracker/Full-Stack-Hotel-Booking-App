@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cookieParser = require('cookie-parser')
 const app = express();
 
 const authRoute = require("./routes/auth");
@@ -25,7 +26,9 @@ mongoose.connection.on("disconnected", () => {
 });
 
 //middlewares
+app.use(cookieParser())
 app.use(express.json()); //middleware for being able to send json objects to express server
+
 app.use("/auth", authRoute);
 app.use("/users", usersRoute);
 app.use("/hotels", hotelsRoute);
@@ -40,7 +43,7 @@ app.use((error, req, res, next) => {
     status: errorStatus,
     message: errorMessage,
     stack: error.stack,
-  });
+  });  
 });
 
 app.listen(port, () => {

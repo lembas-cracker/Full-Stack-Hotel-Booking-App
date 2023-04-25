@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const {verifyAdmin } = require("../utils/verify-token")
 let Hotel = require("../models/hotel.model");
-const { createError } = require("../utils/error");
+
 
 //create a hotel
-router.post("/", async (req, res) => {
+router.post("/", verifyAdmin, async (req, res) => {
   const newHotel = new Hotel(req.body);
   try {
     const savedHotel = await newHotel.save();
@@ -15,7 +16,7 @@ router.post("/", async (req, res) => {
 });
 
 //update a hotel
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyAdmin, async (req, res, next) => {
   try {
     const updatedHotel = await Hotel.findByIdAndUpdate(
       req.params.id,
@@ -29,7 +30,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //delete a hotel
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyAdmin, async (req, res, next) => {
   try {
     await Hotel.findByIdAndDelete(req.params.id);
     res.status(200).json("Hotel has been deleted!");
@@ -39,7 +40,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 //get a specific hotel
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const hotel = await Hotel.find(req.params.id);
     res.status(200).json(hotel);
@@ -50,11 +51,8 @@ router.get("/:id", async (req, res) => {
 
 //get all hotels
 router.get("/", async (req, res, next) => {
-  const failed = true;
-
-  //pass an error to the next use() middleware in server.js
-  if (failed) return next(createError(401, "You are not authenticated"));
-
+  //pass an error to the next use() middleware in server.js with next()
+  
   try {
     const hotels = await Hotel.find();
     res.status(200).json(hotels);
