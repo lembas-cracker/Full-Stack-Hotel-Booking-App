@@ -9,6 +9,8 @@ import "react-date-range/dist/styles.css"
 import "react-date-range/dist/theme/default.css"
 import { useOutside } from '../useOutsideHook'
 import SearchItem from '../components/SearchItem'
+import useFetch from '../useFetchHook'
+import { API_BASE_URL } from '../api'
 
 
 
@@ -18,12 +20,21 @@ const HotelList = () => {
     const [date, setDate] = useState(location.state.date)
     const [openDate, setOpenDate] = useState(false)
     const [options, setOptions] = useState(location.state.options)
+    const [min, setMin] = useState(undefined)
+    const [max, setMax] = useState(undefined)
+
+    const {data, loading, error, reFetch} = useFetch(API_BASE_URL + `/hotels?city=${destination}&min=${min || 0}&max=${max || 999}`)
 
 
     const dateRef = useRef()
     useOutside(dateRef, useCallback(() => setOpenDate(false), []))
     const optionsRef = useRef()
     useOutside(optionsRef, useCallback(() => setOptions(false), []))
+
+
+    const handleClick = () => {
+        reFetch()
+    }
 
 
     return (
@@ -54,11 +65,11 @@ const HotelList = () => {
                             <div className="list-options">
                                 <div className="list-option-item">
                                     <span className="list-option-text">Min price <small>per night</small></span>
-                                    <input type="number" className="list-option-input" />
+                                    <input onChange={e => setMin(e.target.value)} type="number" className="list-option-input" />
                                 </div>
                                 <div className="list-option-item">
                                     <span className="list-option-text">Max price <small>per night</small></span>
-                                    <input type="number" className="list-option-input" />
+                                    <input onChange={e => setMax(e.target.value)} type="number" className="list-option-input" />
                                 </div>
                                 <div className="list-option-item">
                                     <span className="list-option-text">Adult</span>
@@ -74,18 +85,14 @@ const HotelList = () => {
                                 </div>
                             </div>
                         </div>
-                        <button>Search</button>
+                        <button onClick={handleClick}>Search</button>
                     </div>
                     <div className="list-result">
-                        <SearchItem />
-                        <SearchItem />
-                        <SearchItem />
-                        <SearchItem />
-                        <SearchItem />
-                        <SearchItem />
-                        <SearchItem />
-                        <SearchItem />
-                        <SearchItem />
+                      {loading ? "Loading" : <>
+                        {data.map(item => (
+                           <SearchItem item={item} key={item._id}/>
+                         ))}
+                   </>}
                     </div>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
 const app = express();
 
 const authRoute = require("./routes/auth");
@@ -26,6 +27,7 @@ mongoose.connection.on("disconnected", () => {
 });
 
 //middlewares
+app.use(cors())
 app.use(cookieParser())
 app.use(express.json()); //middleware for being able to send json objects to express server
 

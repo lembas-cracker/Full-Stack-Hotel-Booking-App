@@ -50,6 +50,11 @@ router.put("/:id", verifyAdmin, async (req, res, next) => {
       next(error);
     }
   });
+ 
+  //fix urls
+  // /rooms/123/456
+  // /hotels/456/rooms/123
+  // /movies/123/soundtrack
   
   //get a specific room
   router.get("/:id", async (req, res, next) => {

@@ -1,16 +1,22 @@
+import useFetch from '../useFetchHook'
+import {API_BASE_URL} from '../api'
 import './front-page.css'
 
 const FrontPage = () => {
+   const {data, loading, error} = useFetch(API_BASE_URL + '/hotels/countByCity?cities=Madrid,Paris,Tokyo')
+
     return (
         <div className="front-page">
-            <div className="front-page-item">
+            {loading ? "Loading, please wait..." : (
+            <>
+              <div className="front-page-item">
                 <img
                     src="https://cf.bstatic.com/xdata/images/city/max500/957801.webp?k=a969e39bcd40cdcc21786ba92826063e3cb09bf307bcfeac2aa392b838e9b7a5&o="
                     alt=""
                     className="front-page-img" />
                 <div className="front-page-title">
-                    <h1>Dublin</h1>
-                    <h2>123 properties</h2>
+                    <h1>Madrid</h1>
+                    <h2>{data[0]} properties</h2>
                 </div>
             </div>
 
@@ -21,8 +27,8 @@ const FrontPage = () => {
                     className="front-page-img"
                 />
                 <div className="front-page-title">
-                    <h1>Reno</h1>
-                    <h2>533 properties</h2>
+                    <h1>Paris</h1>
+                    <h2>{data[1]} properties</h2>
                 </div>
             </div>
             <div className="front-page-item">
@@ -32,10 +38,13 @@ const FrontPage = () => {
                     className="front-page-img"
                 />
                 <div className="front-page-title">
-                    <h1>Austin</h1>
-                    <h2>532 properties</h2>
+                    <h1>Tokyo</h1>
+                    <h2>{data[2]} properties</h2>
                 </div>
             </div>
+            </>
+            )
+            }
         </div>
     )
 }

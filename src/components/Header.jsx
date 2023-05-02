@@ -121,10 +121,9 @@ const Header = ({ type }) => {
                 onChange={(e) => setDestination(e.target.value)}
               />
             </div>
-            <div className="header-search-item" ref={dateRef}>
+            <div className="header-search-item" ref={dateRef} onClick={() => setOpenDate(!openDate)}>
               <FontAwesomeIcon icon={faCalendarDays} className="header-icon" />
               <span
-                onClick={() => setOpenDate(!openDate)}
                 className="header-search-text"
               >{`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
                 date[0].endDate,
@@ -140,12 +139,10 @@ const Header = ({ type }) => {
                 />
               )}
             </div>
-            <div className="header-search-item" ref={optionsRef}>
+            <div className="header-search-item" ref={optionsRef} onClick={() => setOpenOptions(!openOptions)}>
               <FontAwesomeIcon icon={faPerson} className="header-icon" />
-              <span
-                onClick={() => setOpenOptions(!openOptions)}
-                className="header-search-text"
-              >{`${options.adult} adult ⸱ ${options.children} children ⸱ ${options.room} room`}</span>
+              <span className="header-search-text">
+                {`${options.adult} adult ⸱ ${options.children} children ⸱ ${options.room} room`}</span>
               {openOptions && (
                 <div className="options">
                   <div className="option-item">
