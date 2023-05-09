@@ -1,28 +1,40 @@
 import "./hotel.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleArrowLeft,
-  faCircleArrowRight,
-  faCircleXmark,
-  faLocationDot,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import MailList from "../components/MailList";
 import Footer from "../components/Footer";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import useFetch from "../useFetchHook";
 import { API_BASE_URL } from "../api";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { searchParamsFromQuery } from "../context/SearchContext";
+import { AuthContext } from "../context/AuthContext";
+import Reserve from "../components/Reserve";
 
 const Hotel = () => {
   const location = useLocation();
   const hotel_id = location.pathname.split("/")[2];
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
-  const { data, loading, error } = useFetch(
-    API_BASE_URL + `/hotels/find/${hotel_id}`
-  );
+  const [openModal, setOpenModal] = useState(false);
+
+  const { data, loading, error } = useFetch(API_BASE_URL + `/hotels/find/${hotel_id}`);
+
+  const { dates, options } = searchParamsFromQuery(location.search);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const milisecondsPerDay = 1000 * 60 * 60 * 24;
+  const dayDifference = (date1, date2) => {
+    const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    const amountOfDays = Math.ceil(timeDiff / milisecondsPerDay);
+    return amountOfDays;
+  };
+
+  // If you open this hotel's page without query params, we show price for 1 day by default.
+  const totalDays = dates.length === 0 ? 1 : dayDifference(dates[0].endDate, dates[0].startDate);
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -41,6 +53,10 @@ const Hotel = () => {
     setSlideNumber(newSlideNumber);
   };
 
+  const handleClick = () => {
+    user ? setOpenModal(true) : navigate("/login");
+  };
+
   return (
     <div>
       <Navbar />
@@ -51,28 +67,12 @@ const Hotel = () => {
         <div className="hotel-container">
           {open && (
             <div className="slider">
-              <FontAwesomeIcon
-                icon={faCircleXmark}
-                className="close"
-                onClick={() => setOpen(false)}
-              />
-              <FontAwesomeIcon
-                icon={faCircleArrowLeft}
-                className="arrow"
-                onClick={() => handleMove("l")}
-              />
+              <FontAwesomeIcon icon={faCircleXmark} className="close" onClick={() => setOpen(false)} />
+              <FontAwesomeIcon icon={faCircleArrowLeft} className="arrow" onClick={() => handleMove("l")} />
               <div className="slider-wrapper">
-                <img
-                  src={data.photos[slideNumber]}
-                  alt=""
-                  className="slider-img"
-                />
+                <img src={data.photos[slideNumber]} alt="" className="slider-img" />
               </div>
-              <FontAwesomeIcon
-                icon={faCircleArrowRight}
-                className="arrow"
-                onClick={() => handleMove("r")}
-              />
+              <FontAwesomeIcon icon={faCircleArrowRight} className="arrow" onClick={() => handleMove("r")} />
             </div>
           )}
           <div className="hotel-wrapper">
@@ -83,22 +83,14 @@ const Hotel = () => {
                   <FontAwesomeIcon icon={faLocationDot} />
                   <span>{data.address}</span>
                 </div>
-                <span className="hotel-distance">
-                  Excellent location – {data.distance}m from downtown
-                </span>
+                <span className="hotel-distance">Excellent location – {data.distance} from downtown</span>
                 <span className="hotel-price-highlight">
-                  Book a stay over ${data.cheapestPrice} at this property and
-                  get a free airport taxi
+                  Book a stay over ${data.cheapestPrice} at this property and get a free airport taxi
                 </span>
                 <div className="hotel-images">
                   {data.photos?.map((photo, i) => (
                     <div className="hotel-img-wrapper" key={i}>
-                      <img
-                        onClick={() => handleOpen(i)}
-                        src={photo}
-                        alt=""
-                        className="hotel-img"
-                      />
+                      <img onClick={() => handleOpen(i)} src={photo} alt="" className="hotel-img" />
                     </div>
                   ))}
                 </div>
@@ -107,14 +99,11 @@ const Hotel = () => {
               </div>
               <div className="hotel-details-price">
                 <h1>{data.title}</h1>
-                <span>
-                  Located in the real heart of Krakow, this property has an
-                  excellent location score of 9.8!
-                </span>
+                <span>Located in the real heart of Krakow, this property has an excellent location score of 9.8!</span>
                 <h2>
-                  <b>${data.cheapestPrice * 7}</b> (7 nights)
+                  <b>${data.cheapestPrice * totalDays * (options?.room || 1)}</b> {`(${totalDays} nights)`}
                 </h2>
-                <button>Reserve or Book Now!</button>
+                <button onClick={handleClick}>Reserve or Book Now!</button>
               </div>
             </div>
           </div>
@@ -122,6 +111,7 @@ const Hotel = () => {
           <Footer />
         </div>
       )}
+      {openModal && <Reserve setOpen={setOpenModal} hotelId={hotel_id} />}
     </div>
   );
 };

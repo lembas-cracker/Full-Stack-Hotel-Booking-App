@@ -11,17 +11,19 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./header.css";
 import { DateRange } from "react-date-range";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
 import { useOutside } from "../useOutsideHook";
+import { searchParamsToQuery } from "../context/SearchContext";
+import { AuthContext } from "../context/AuthContext";
 
 const Header = ({ type }) => {
   const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
-  const [date, setDate] = useState([
+  const [dates, setDates] = useState([
     {
       startDate: new Date(),
       endDate: new Date(),
@@ -35,6 +37,7 @@ const Header = ({ type }) => {
     children: 0,
     room: 1,
   });
+  const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -48,7 +51,7 @@ const Header = ({ type }) => {
   };
 
   const handleSearch = () => {
-    navigate("/hotels", { state: { destination, date, options } });
+    navigate(`/hotels?${searchParamsToQuery({ destination, options, dates })}`);
   };
 
   //when the calendar or options menu are opened, we close them when we click anywhere else in the document (outside of these elements)
@@ -68,11 +71,7 @@ const Header = ({ type }) => {
   return (
     <>
       <div className="header">
-        <div
-          className={
-            type === "list" ? "header-container list-mode" : "header-container"
-          }
-        >
+        <div className={type === "list" ? "header-container list-mode" : "header-container"}>
           <div className="header-list">
             <div className="header-list-item active">
               <FontAwesomeIcon icon={faHotel} />
@@ -101,10 +100,9 @@ const Header = ({ type }) => {
             <>
               <h1 className="header-title">A lifetime of discounts? Genius!</h1>
               <p className="header-description">
-                Get rewarded for your travels – unlock instant savings of 10% or
-                more with a free Bookit account
+                Get rewarded for your travels – unlock instant savings of 10% or more with a free Bookit account
               </p>
-              <button className="header-signIn-btn">Sign in / Register</button>
+              {!user && <button className="header-signIn-btn">Sign in / Register</button>}
             </>
           )}
         </div>
@@ -123,18 +121,16 @@ const Header = ({ type }) => {
             </div>
             <div className="header-search-item" ref={dateRef} onClick={() => setOpenDate(!openDate)}>
               <FontAwesomeIcon icon={faCalendarDays} className="header-icon" />
-              <span
-                className="header-search-text"
-              >{`${format(date[0].startDate, "MM/dd/yyyy")} to ${format(
-                date[0].endDate,
+              <span className="header-search-text">{`${format(dates[0].startDate, "MM/dd/yyyy")} to ${format(
+                dates[0].endDate,
                 "MM/dd/yyyy"
               )}`}</span>
               {openDate && (
                 <DateRange
                   editableDateInputs={true}
-                  onChange={(item) => setDate([item.selection])}
+                  onChange={(item) => setDates([item.selection])}
                   moveRangeOnFirstSelection={false}
-                  ranges={date}
+                  ranges={dates}
                   className="date"
                 />
               )}
@@ -142,7 +138,8 @@ const Header = ({ type }) => {
             <div className="header-search-item" ref={optionsRef} onClick={() => setOpenOptions(!openOptions)}>
               <FontAwesomeIcon icon={faPerson} className="header-icon" />
               <span className="header-search-text">
-                {`${options.adult} adult ⸱ ${options.children} children ⸱ ${options.room} room`}</span>
+                {`${options.adult} adult ⸱ ${options.children} children ⸱ ${options.room} room`}
+              </span>
               {openOptions && (
                 <div className="options">
                   <div className="option-item">
@@ -155,13 +152,8 @@ const Header = ({ type }) => {
                       >
                         -
                       </button>
-                      <span className="option-counter-number">
-                        {options.adult}
-                      </span>
-                      <button
-                        className="option-counter-btn"
-                        onClick={() => handleOption("adult", "increase")}
-                      >
+                      <span className="option-counter-number">{options.adult}</span>
+                      <button className="option-counter-btn" onClick={() => handleOption("adult", "increase")}>
                         +
                       </button>
                     </div>
@@ -176,13 +168,8 @@ const Header = ({ type }) => {
                       >
                         -
                       </button>
-                      <span className="option-counter-number">
-                        {options.children}
-                      </span>
-                      <button
-                        className="option-counter-btn"
-                        onClick={() => handleOption("children", "increase")}
-                      >
+                      <span className="option-counter-number">{options.children}</span>
+                      <button className="option-counter-btn" onClick={() => handleOption("children", "increase")}>
                         +
                       </button>
                     </div>
@@ -197,13 +184,8 @@ const Header = ({ type }) => {
                       >
                         -
                       </button>
-                      <span className="option-counter-number">
-                        {options.room}
-                      </span>
-                      <button
-                        className="option-counter-btn"
-                        onClick={() => handleOption("room", "increase")}
-                      >
+                      <span className="option-counter-number">{options.room}</span>
+                      <button className="option-counter-btn" onClick={() => handleOption("room", "increase")}>
                         +
                       </button>
                     </div>
