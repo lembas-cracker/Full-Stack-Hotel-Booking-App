@@ -119,23 +119,33 @@ const Header = ({ type }) => {
                 onChange={(e) => setDestination(e.target.value)}
               />
             </div>
-            <div className="header-search-item" ref={dateRef} onClick={() => setOpenDate(!openDate)}>
+            <div className="header-search-item" ref={dateRef} onClick={() => setOpenDate(true)}>
               <FontAwesomeIcon icon={faCalendarDays} className="header-icon" />
               <span className="header-search-text">{`${format(dates[0].startDate, "MM/dd/yyyy")} to ${format(
                 dates[0].endDate,
                 "MM/dd/yyyy"
               )}`}</span>
               {openDate && (
-                <DateRange
-                  editableDateInputs={true}
-                  onChange={(item) => setDates([item.selection])}
-                  moveRangeOnFirstSelection={false}
-                  ranges={dates}
-                  className="date"
-                />
+                <div className="date">
+                  <DateRange
+                    editableDateInputs={true}
+                    onChange={(item) => setDates([item.selection])}
+                    moveRangeOnFirstSelection={false}
+                    ranges={dates}
+                  />
+                  <button
+                    className="dialog-close-button"
+                    onClick={(event) => {
+                      setOpenDate(false);
+                      event.stopPropagation();
+                    }}
+                  >
+                    Close this shit
+                  </button>
+                </div>
               )}
             </div>
-            <div className="header-search-item" ref={optionsRef} onClick={() => setOpenOptions(!openOptions)}>
+            <div className="header-search-item" ref={optionsRef} onClick={() => setOpenOptions(true)}>
               <FontAwesomeIcon icon={faPerson} className="header-icon" />
               <span className="header-search-text">
                 {`${options.adult} adult ⸱ ${options.children} children ⸱ ${options.room} room`}
@@ -190,6 +200,15 @@ const Header = ({ type }) => {
                       </button>
                     </div>
                   </div>
+                  <button
+                    className="dialog-close-button"
+                    onClick={(event) => {
+                      setOpenOptions(false);
+                      event.stopPropagation();
+                    }}
+                  >
+                    Close this shit
+                  </button>
                 </div>
               )}
             </div>

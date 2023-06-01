@@ -122,6 +122,15 @@
   z-index: 2;
 }
 
+.dialog-close-button {
+  background-color: rgb(122, 253, 122);
+  display: block;
+  padding: 5px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+}
+
 .options {
   position: absolute;
   top: 50px;
@@ -175,6 +184,9 @@
   }
   .header-list {
     margin-bottom: 25px;
+  }
+  .header-list::-webkit-scrollbar {
+    height: 4px;
   }
   .header-description {
     display: none;

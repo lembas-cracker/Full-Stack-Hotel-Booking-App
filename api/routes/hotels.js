@@ -92,6 +92,7 @@ router.get("/countByType", async (req, res, next) => {
   }
 });
 
+//get a room within a specific hotel
 router.get("/room/:id", async (req, res, next) => {
   try {
     const hotel = await Hotel.findById(req.params.id);

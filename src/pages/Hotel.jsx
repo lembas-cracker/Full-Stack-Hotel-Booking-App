@@ -94,12 +94,12 @@ const Hotel = () => {
                     </div>
                   ))}
                 </div>
-                <h1 className="hotel-title">{data.title}</h1>
+                <h1 className="hotel-title">Property Description</h1>
                 <p className="hotel-desc">{data.description}</p>
               </div>
               <div className="hotel-details-price">
                 <h1>{data.title}</h1>
-                <span>Located in the real heart of Krakow, this property has an excellent location score of 9.8!</span>
+                <span>This property has an excellent location score of {data.rating || 9.5}!</span>
                 <h2>
                   <b>${data.cheapestPrice * totalDays * (options?.room || 1)}</b> {`(${totalDays} nights)`}
                 </h2>

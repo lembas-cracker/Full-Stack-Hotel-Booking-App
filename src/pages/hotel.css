@@ -25,7 +25,7 @@
 }
 
 .hotel-title {
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .hotel-address {
@@ -151,4 +151,23 @@
   font-size: 50px;
   color: lightgray;
   cursor: pointer;
+}
+
+@media screen and (max-width: 1024px) {
+  .hotel-container {
+    margin-top: 0;
+  }
+  .hotel-details-text {
+    padding: 0 20px 0 20px;
+  }
+  .hotel-details {
+    flex-direction: column;
+  }
+  .hotel-distance,
+  .hotel-price-highlight {
+    font-size: 14px;
+  }
+  .hotel-details-price {
+    gap: 0;
+  }
 }
