@@ -83,6 +83,19 @@
   font-weight: 500;
   cursor: pointer;
 }
+.magnifying-icon {
+  margin: 0 5px 0 0;
+}
+
+.search-not-found {
+  padding: 0 0 15px;
+  font-weight: bold;
+}
+
+.random-search {
+  display: flex;
+  flex-direction: column;
+}
 
 @media screen and (max-width: 1024px) {
   .list-wrapper {

@@ -38,7 +38,7 @@ router.delete("/:id", verifyAdmin, async (req, res, next) => {
 //get a specific hotel
 router.get("/find/:id", async (req, res, next) => {
   try {
-    const hotel = await Hotel.findById(req.params.id);
+    const hotel = await Hotel.findById(req.params.id).collation({ locale: "en", strength: 2 });
     res.status(200).json(hotel);
   } catch (error) {
     next(error);
@@ -51,7 +51,9 @@ router.get("/", async (req, res, next) => {
 
   try {
     const { limit, min, max, ...params } = req.query;
-    const hotels = await Hotel.find({ ...params, cheapestPrice: { $gt: min || 1, $lt: max || 999 } }).limit(limit);
+    const hotels = await Hotel.find({ ...params, cheapestPrice: { $gt: min || 1, $lt: max || 999 } })
+      .collation({ locale: "en", strength: 2 })
+      .limit(limit);
     res.status(200).json(hotels);
   } catch (error) {
     next(error);
@@ -112,6 +114,16 @@ router.get("/rating", async (req, res, next) => {
   try {
     const rating = await Hotel.find().sort({ rating: -1 }).limit(20);
     res.status(200).json(rating);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//get all hotels in random order
+router.get("/random", async (req, res, next) => {
+  try {
+    const random = await Hotel.aggregate([{ $sample: { size: 10 } }]);
+    res.status(200).json(random);
   } catch (error) {
     next(error);
   }

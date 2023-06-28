@@ -5,11 +5,17 @@ import "./search-item.css";
 const SearchItem = ({ item }) => {
   const location = useLocation();
   const searchParams = searchParamsFromQuery(location.search);
-
+  console.log(item.photos);
   return (
     <Link to={`/hotels/${item._id}?${searchParamsToQuery(searchParams)}`}>
       <div className="search-item">
-        <img src={item.photos[0]} alt="" className="si-img" />
+        {<img src={item.photos[0]} alt="" className="si-img" /> || (
+          <img
+            src="https://media.istockphoto.com/id/1206575314/vector/image-unavailable-icon.jpg?s=612x612&w=0&k=20&c=7aypXCTzJ42V0xRHJ08Nq1K6fPgY5IB_D4fXbWloX_w="
+            alt=""
+            className="si-img"
+          />
+        )}
 
         <div className="si-desc">
           <div className="si-header">
@@ -33,9 +39,8 @@ const SearchItem = ({ item }) => {
             <div className="si-detail-texts">
               <span className="si-price">${item.cheapestPrice}</span>
               <span className="si-taxi-op">Includes taxes and fees</span>
-              <Link to={`/hotels/${item._id}?${searchParamsToQuery(searchParams)}`}>
-                <button className="si-check-button">See availability</button>
-              </Link>
+
+              <button className="si-check-button">See availability</button>
             </div>
           </div>
         </div>

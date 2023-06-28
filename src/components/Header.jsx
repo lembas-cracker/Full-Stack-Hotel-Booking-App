@@ -121,7 +121,7 @@ const Header = ({ type }) => {
                 type="text"
                 placeholder="Where are you going?"
                 className="header-search-input"
-                onChange={(e) => setDestination(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))}
+                onChange={(e) => setDestination(e.target.value)}
                 onKeyDown={(e) => handleSearchKeydown(e)}
               />
             </div>

@@ -13,10 +13,14 @@ import SearchItem from "../components/SearchItem";
 import useFetch from "../useFetchHook";
 import { API_BASE_URL } from "../api";
 import { searchParamsFromQuery, searchParamsToQuery } from "../context/SearchContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const HotelList = () => {
   const location = useLocation();
   const locationParams = searchParamsFromQuery(location.search);
+  const { data: dataRandom } = useFetch(API_BASE_URL + "/hotels/random");
+  console.log(dataRandom);
 
   const destination = locationParams.destination;
   const options = locationParams.options;
@@ -31,7 +35,7 @@ const HotelList = () => {
   const [min, setMin] = useState(undefined);
   const [max, setMax] = useState(undefined);
 
-  const { data, loading, error, reFetch } = useFetch(
+  const { data, loading, error } = useFetch(
     API_BASE_URL + `/hotels?city=${destination}&min=${min || 0}&max=${max || 999}`
   );
 
@@ -101,8 +105,19 @@ const HotelList = () => {
             <button>Search</button>
           </div>
           <div className="list-result">
-            {loading ? (
-              "Loading"
+            {Array.isArray(data) && data.length === 0 ? (
+              <div className="random-search">
+                <span className="search-not-found">
+                  <FontAwesomeIcon icon={faMagnifyingGlass} className="magnifying-icon" />
+                  No properties found in this destination.
+                </span>
+                <span style={{ padding: "0 0 10px" }}>Check out other properties:</span>
+                {dataRandom?.map((item) => (
+                  <SearchItem item={item} key={item._id} />
+                ))}
+              </div>
+            ) : loading ? (
+              "Loading..."
             ) : (
               <>
                 {data.map((item) => (
