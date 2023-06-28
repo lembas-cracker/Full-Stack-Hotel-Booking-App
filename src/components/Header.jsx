@@ -38,7 +38,6 @@ const Header = ({ type }) => {
     room: 1,
   });
   const { user } = useContext(AuthContext);
-
   const navigate = useNavigate();
 
   const handleOption = (el, operation) => {
@@ -50,8 +49,14 @@ const Header = ({ type }) => {
     });
   };
 
-  const handleSearch = () => {
+  const handleSearchClick = () => {
     navigate(`/hotels?${searchParamsToQuery({ destination, options, dates })}`);
+  };
+
+  const handleSearchKeydown = (e) => {
+    if (e.key === "Enter") {
+      navigate(`/hotels?${searchParamsToQuery({ destination, options, dates })}`);
+    }
   };
 
   //when the calendar or options menu are opened, we close them when we click anywhere else in the document (outside of these elements)
@@ -116,7 +121,8 @@ const Header = ({ type }) => {
                 type="text"
                 placeholder="Where are you going?"
                 className="header-search-input"
-                onChange={(e) => setDestination(e.target.value)}
+                onChange={(e) => setDestination(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))}
+                onKeyDown={(e) => handleSearchKeydown(e)}
               />
             </div>
             <div className="header-search-item" ref={dateRef} onClick={() => setOpenDate(true)}>
@@ -140,7 +146,7 @@ const Header = ({ type }) => {
                       event.stopPropagation();
                     }}
                   >
-                    Close this shit
+                    Close
                   </button>
                 </div>
               )}
@@ -207,13 +213,13 @@ const Header = ({ type }) => {
                       event.stopPropagation();
                     }}
                   >
-                    Close this shit
+                    Close
                   </button>
                 </div>
               )}
             </div>
             <div className="header-search-item">
-              <div className="header-btn" onClick={handleSearch}>
+              <div className="header-btn" onClick={handleSearchClick}>
                 Search
               </div>
             </div>

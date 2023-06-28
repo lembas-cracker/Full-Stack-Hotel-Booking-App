@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cookieParser = require('cookie-parser')
-const cors = require('cors')
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const app = express();
 
 const authRoute = require("./routes/auth");
@@ -27,8 +27,8 @@ mongoose.connection.on("disconnected", () => {
 });
 
 //middlewares
-app.use(cors())
-app.use(cookieParser())
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cookieParser());
 app.use(express.json()); //middleware for being able to send json objects to express server
 
 app.use("/auth", authRoute);
@@ -45,7 +45,7 @@ app.use((error, req, res, next) => {
     status: errorStatus,
     message: errorMessage,
     stack: error.stack,
-  });  
+  });
 });
 
 app.listen(port, () => {

@@ -2,6 +2,7 @@ import "./hotel-list.css";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import { useState, useRef, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import { DateRange } from "react-date-range";
@@ -11,16 +12,22 @@ import { useOutside } from "../useOutsideHook";
 import SearchItem from "../components/SearchItem";
 import useFetch from "../useFetchHook";
 import { API_BASE_URL } from "../api";
-import { searchParamsFromQuery } from "../context/SearchContext";
+import { searchParamsFromQuery, searchParamsToQuery } from "../context/SearchContext";
 
 const HotelList = () => {
   const location = useLocation();
   const locationParams = searchParamsFromQuery(location.search);
 
-  const [destination, setDestination] = useState(locationParams.destination);
-  const [dates, setDates] = useState(locationParams.dates);
+  const destination = locationParams.destination;
+  const options = locationParams.options;
+  const dates = locationParams.dates;
+
+  const navigate = useNavigate();
+  const setDestination = (destination) => navigate(`/hotels?${searchParamsToQuery({ destination, options, dates })}`);
+  const setOptions = (options) => navigate(`/hotels?${searchParamsToQuery({ destination, options, dates })}`);
+  const setDates = (dates) => navigate(`/hotels?${searchParamsToQuery({ destination, options, dates })}`);
+
   const [openDate, setOpenDate] = useState(false);
-  const [options, setOptions] = useState(locationParams.options);
   const [min, setMin] = useState(undefined);
   const [max, setMax] = useState(undefined);
 
@@ -29,18 +36,14 @@ const HotelList = () => {
   );
 
   const dateRef = useRef();
-  useOutside(
-    dateRef,
-    useCallback(() => setOpenDate(false), [])
-  );
+  useOutside(dateRef, () => setOpenDate(false));
   const optionsRef = useRef();
-  useOutside(
-    optionsRef,
-    useCallback(() => setOptions(false), [])
-  );
+  useOutside(optionsRef, () => setOptions(false));
 
-  const handleClick = () => {
-    reFetch();
+  const handleSearchKeydown = (e) => {
+    if (e.key === "Enter") {
+      setDestination(e.target.value);
+    }
   };
 
   return (
@@ -53,7 +56,7 @@ const HotelList = () => {
             <h1 className="list-title">Search</h1>
             <div className="list-item">
               <label>Destination</label>
-              <input placeholder={destination} type="text" />
+              <input placeholder={destination} type="text" onKeyDown={(e) => handleSearchKeydown(e)} />
             </div>
             <div className="list-item" ref={dateRef}>
               <label htmlFor="">Check-in Date</label>
@@ -95,7 +98,7 @@ const HotelList = () => {
                 </div>
               </div>
             </div>
-            <button onClick={handleClick}>Search</button>
+            <button>Search</button>
           </div>
           <div className="list-result">
             {loading ? (

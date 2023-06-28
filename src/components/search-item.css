@@ -1,3 +1,8 @@
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .search-item {
   border: 1px solid lightgray;
   padding: 10px;
@@ -8,9 +13,24 @@
   margin-bottom: 20px;
 }
 
+.si-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.si-rating {
+  display: flex;
+  align-self: center;
+}
+
+.si-rating span {
+  margin-right: 5px;
+}
+
 .si-img {
   width: 200px;
-  height: 200px;
+  height: auto;
   object-fit: cover;
 }
 
@@ -24,6 +44,7 @@
 .si-title {
   font-size: 20px;
   color: #0071c2;
+  margin-bottom: 0;
 }
 
 .si-distance {
@@ -63,11 +84,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-}
-
-.si-rating {
-  display: flex;
   justify-content: space-between;
 }
 

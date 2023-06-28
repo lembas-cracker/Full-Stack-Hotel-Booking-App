@@ -63,16 +63,17 @@ router.delete("/:id/:hotelid", verifyAdmin, async (req, res, next) => {
   }
 });
 
-//fix urls
-// /rooms/123/456
-// /hotels/456/rooms/123
-// /movies/123/soundtrack
-
 //get a specific room
 router.get("/:id", async (req, res, next) => {
   try {
-    const room = await Room.find({ _id: req.params.id });
-    res.status(200).json(room);
+    const foundArray = await Room.find({ _id: req.params.id });
+    if (foundArray.length === 1) {
+      res.status(200).json(foundArray[0]);
+    } else {
+      const error = new Error("Room not found");
+      error.status = 404;
+      throw error;
+    }
   } catch (error) {
     next(error);
   }

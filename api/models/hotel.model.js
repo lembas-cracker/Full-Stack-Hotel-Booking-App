@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
-
 const HotelSchema = new Schema({
   name: {
     type: String,
@@ -38,7 +36,7 @@ const HotelSchema = new Schema({
   rating: {
     type: Number,
     min: 0,
-    max: 5,
+    max: 10,
   },
   rooms: {
     type: [String],

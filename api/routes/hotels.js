@@ -5,7 +5,7 @@ let Hotel = require("../models/hotel.model");
 let Room = require("../models/room.model");
 
 //create a hotel
-router.post("/", verifyAdmin, async (req, res) => {
+router.post("/", verifyAdmin, async (req, res, next) => {
   const newHotel = new Hotel(req.body);
   try {
     const savedHotel = await newHotel.save();
@@ -102,6 +102,16 @@ router.get("/room/:id", async (req, res, next) => {
       })
     );
     res.status(200).json(list);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//get hotels by rating in descending order
+router.get("/rating", async (req, res, next) => {
+  try {
+    const rating = await Hotel.find().sort({ rating: -1 }).limit(20);
+    res.status(200).json(rating);
   } catch (error) {
     next(error);
   }
