@@ -27,7 +27,7 @@ mongoose.connection.on("disconnected", () => {
 });
 
 //middlewares
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: ["http://localhost:3000", "https://lembas-cracker.github.io"], credentials: true }));
 app.use(cookieParser());
 app.use(express.json()); //middleware for being able to send json objects to express server
 
