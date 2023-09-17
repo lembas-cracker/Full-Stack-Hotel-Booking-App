@@ -36,7 +36,7 @@ router.post("/login", async (req, res, next) => {
     //destructuring those properties we don't want to send back in response like password and isAdmin properties
     const { password, isAdmin, ...other } = user._doc;
     res
-      .cookie("access_token", token, { httpOnly: true })
+      .cookie("access_token", token, { httpOnly: true, sameSite: "none", secure: true })
       .status(200)
       .json({ details: { ...other }, isAdmin });
   } catch (error) {
