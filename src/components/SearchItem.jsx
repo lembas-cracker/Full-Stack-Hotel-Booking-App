@@ -3,31 +3,27 @@ import { searchParamsFromQuery, searchParamsToQuery } from "../context/SearchCon
 import "./search-item.css";
 import { useState } from "react";
 
+const FALLBACK_IMAGE_URL =
+  "https://media.istockphoto.com/id/1199906477/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=QRaXTJuDrWe8Mwi-w98RHoy8-TSdbFPaYFeyUqLidds=";
+
 const SearchItem = ({ item }) => {
   const location = useLocation();
   const searchParams = searchParamsFromQuery(location.search);
-  const [imageLoadError, setImageLoadError] = useState(true);
-
-  // const handleImageError = (e) => {
-  //   e.target.src =
-  //     "https://media.istockphoto.com/id/1199906477/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=QRaXTJuDrWe8Mwi-w98RHoy8-TSdbFPaYFeyUqLidds=";
-  //   e.target.style.objectFit = "contain";
-
-  // };
+  const [shouldUseFallbackImage, setUseFallbackImage] = useState(false);
 
   return (
     <Link to={`/hotels/${item._id}?${searchParamsToQuery(searchParams)}`}>
       <div className="search-item">
         <img
-          src={item.photos[0]}
+          src={shouldUseFallbackImage ? FALLBACK_IMAGE_URL : item.photos[0]}
           alt=""
-          className="si-img" /*onError={handleImageError}*/
-          onError={(e) =>
-            imageLoadError
-              ? setImageLoadError(false)
-              : (e.target.src =
-                  "https://media.istockphoto.com/id/1199906477/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=QRaXTJuDrWe8Mwi-w98RHoy8-TSdbFPaYFeyUqLidds=")
-          }
+          className={"si-img"}
+          style={shouldUseFallbackImage ? { objectFit: "contain" } : {}}
+          onError={() => {
+            if (!shouldUseFallbackImage) {
+              setUseFallbackImage(true);
+            }
+          }}
         />
 
         <div className="si-desc">

@@ -54,15 +54,16 @@ const Hotel = () => {
     setSlideNumber(newSlideNumber);
   };
 
-  const handleImageError = (e) => {
-    e.target.src =
-      "https://media.istockphoto.com/id/1199906477/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=QRaXTJuDrWe8Mwi-w98RHoy8-TSdbFPaYFeyUqLidds=";
-    e.target.style.objectFit = "contain";
-  };
-
   const handleClick = () => {
     user ? setOpenModal(true) : navigate("/login");
   };
+
+  const FALLBACK_IMAGE_URL =
+    "https://media.istockphoto.com/id/1199906477/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=QRaXTJuDrWe8Mwi-w98RHoy8-TSdbFPaYFeyUqLidds=";
+
+  // Array of booleans, one per hotel photo, whether a specific photo has failed to load.
+  // Should probably be factored out into a separate image component.
+  const [shouldUseFallbackImage, setUseFallbackImage] = useState([]);
 
   return (
     <div>
@@ -99,10 +100,20 @@ const Hotel = () => {
                     <div className="hotel-img-wrapper" key={i}>
                       <img
                         onClick={() => handleOpen(i)}
-                        src={photo}
+                        src={shouldUseFallbackImage[i] ? FALLBACK_IMAGE_URL : photo}
                         alt=""
                         className="hotel-img"
-                        onError={handleImageError}
+                        onError={() => {
+                          if (!shouldUseFallbackImage[i]) {
+                            setUseFallbackImage((shouldUseFallbackImage) => {
+                              // Set this particular photo to use the fallback image.
+                              // Should probably be factored out into a separate image component.
+                              const newShouldUseFallbackImage = [...shouldUseFallbackImage];
+                              newShouldUseFallbackImage[i] = true;
+                              return newShouldUseFallbackImage;
+                            });
+                          }
+                        }}
                       />
                     </div>
                   ))}
