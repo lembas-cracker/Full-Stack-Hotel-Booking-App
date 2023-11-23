@@ -26,9 +26,7 @@
 .nav-button {
   margin-left: 20px;
   font-size: 15px;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
-  border-color: #0071c2;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
   border-radius: 2px;
   padding: 6px 12px;
   cursor: pointer;

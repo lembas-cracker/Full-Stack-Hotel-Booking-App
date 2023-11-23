@@ -54,6 +54,5 @@ export const searchParamsFromQuery = (queryString) => {
     startDate: new Date(x.startDate),
     endDate: new Date(x.endDate),
   }));
-
   return { destination, options, dates };
 };

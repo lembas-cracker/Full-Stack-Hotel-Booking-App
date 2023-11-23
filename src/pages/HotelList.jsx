@@ -16,22 +16,55 @@ import { searchParamsFromQuery, searchParamsToQuery } from "../context/SearchCon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
+// High-level description:
+
+// The search form should never cause the search results to change,
+// until the user explicitly submits the form - either by
+// clicking "submit" or pressing Enter in any input.
+
+// This means that the API request for getting search results
+// should depend on variables that never change until
+// the form is submitted.
+
+// Solution description:
+
+// All form fields should change local state variables that
+// are not directly used in the API request.
+
+// On submit, the API request params should all be updated.
+// This means:
+// - `setMin` and `setMax` should be called at this point, using
+// the latest values saved in form state variables.
+// - Destination should be saved into the current page URL, so that
+// on the next render it's picked up from `locationParams.destination`
+// and used for the API request due to that.
+
+// Before the form is submitted, those things should not happen.
+// This means:
+// - `setMin` and `setMax` should not be called in input event
+// handlers. Instead, use intermediate state variables, `formMin`
+// and `formMax.
+// - Destination should not be saved into the page URL until the
+// form is submitted. Instead, store the input field in an
+// intermediate state variable.
+
+// It might be easier to implement the second part first, i.e.
+// set up the form variables and change the event handlers,
+// and only then set up the submit handler as described above.
+
 const HotelList = () => {
   const location = useLocation();
   const locationParams = searchParamsFromQuery(location.search);
   const { data: dataRandom } = useFetch(API_BASE_URL + "/hotels/random");
-  console.log(dataRandom);
 
   const destination = locationParams.destination;
   const options = locationParams.options;
   const dates = locationParams.dates;
-
   const navigate = useNavigate();
-  const setDestination = (destination) => navigate(`/hotels?${searchParamsToQuery({ destination, options, dates })}`);
-  const setOptions = (options) => navigate(`/hotels?${searchParamsToQuery({ destination, options, dates })}`);
   const setDates = (dates) => navigate(`/hotels?${searchParamsToQuery({ destination, options, dates })}`);
 
-  const [openDate, setOpenDate] = useState(false);
+  const [isDatePickerOpen, setDatePickerOpen] = useState(false);
+
   const [min, setMin] = useState(undefined);
   const [max, setMax] = useState(undefined);
 
@@ -39,15 +72,20 @@ const HotelList = () => {
     API_BASE_URL + `/hotels?city=${destination}&min=${min || 0}&max=${max || 999}`
   );
 
-  const dateRef = useRef();
-  useOutside(dateRef, () => setOpenDate(false));
-  const optionsRef = useRef();
-  useOutside(optionsRef, () => setOptions(false));
+  const [formDestination, setFormDestination] = useState("");
+  const [formMin, setFormMin] = useState("");
+  const [formMax, setFormMax] = useState("");
 
-  const handleSearchKeydown = (e) => {
-    if (e.key === "Enter") {
-      setDestination(e.target.value);
-    }
+  const datePickerParentRef = useRef();
+  useOutside(datePickerParentRef, () => setDatePickerOpen(false));
+
+  const handleSearchSubmit = (e) => {
+    setMin(formMin);
+    setMax(formMax);
+    navigate(`/hotels?${searchParamsToQuery({ destination: formDestination, options, dates })}`);
+
+    e.preventDefault();
+    return false;
   };
 
   return (
@@ -56,20 +94,20 @@ const HotelList = () => {
       <Header type="list" />
       <div className="list-container">
         <div className="list-wrapper">
-          <div className="list-search">
+          <form className="list-search" onSubmit={handleSearchSubmit}>
             <h1 className="list-title">Search</h1>
             <div className="list-item">
               <label>Destination</label>
-              <input placeholder={destination} type="text" onKeyDown={(e) => handleSearchKeydown(e)} />
+              <input placeholder={destination} type="text" onChange={(e) => setFormDestination(e.target.value)} />
             </div>
-            <div className="list-item" ref={dateRef}>
+            <div className="list-item date-picker" ref={datePickerParentRef}>
               <label htmlFor="">Check-in Date</label>
 
-              <span onClick={() => setOpenDate(!openDate)}>{`${format(dates[0].startDate, "MM/dd/yyyy")} to ${format(
-                dates[0].endDate,
+              <span onClick={() => setDatePickerOpen(!isDatePickerOpen)}>{`${format(
+                dates[0].startDate,
                 "MM/dd/yyyy"
-              )}`}</span>
-              {openDate && (
+              )} to ${format(dates[0].endDate, "MM/dd/yyyy")}`}</span>
+              {isDatePickerOpen && (
                 <DateRange onChange={(item) => setDates([item.selection])} ranges={dates} minDate={new Date()} />
               )}
             </div>
@@ -80,13 +118,13 @@ const HotelList = () => {
                   <span className="list-option-text">
                     Min price <small>per night</small>
                   </span>
-                  <input onChange={(e) => setMin(e.target.value)} type="number" className="list-option-input" />
+                  <input onChange={(e) => setFormMin(e.target.value)} type="number" className="list-option-input" />
                 </div>
                 <div className="list-option-item">
                   <span className="list-option-text">
                     Max price <small>per night</small>
                   </span>
-                  <input onChange={(e) => setMax(e.target.value)} type="number" className="list-option-input" />
+                  <input onChange={(e) => setFormMax(e.target.value)} type="number" className="list-option-input" />
                 </div>
                 <div className="list-option-item">
                   <span className="list-option-text">Adult</span>
@@ -102,8 +140,8 @@ const HotelList = () => {
                 </div>
               </div>
             </div>
-            <button>Search</button>
-          </div>
+            <button type="submit">Search</button>
+          </form>
           <div className="list-result">
             {Array.isArray(data) && data.length === 0 ? (
               <div className="random-search">

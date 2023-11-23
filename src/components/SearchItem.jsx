@@ -1,21 +1,34 @@
 import { Link, useLocation } from "react-router-dom";
 import { searchParamsFromQuery, searchParamsToQuery } from "../context/SearchContext";
 import "./search-item.css";
+import { useState } from "react";
 
 const SearchItem = ({ item }) => {
   const location = useLocation();
   const searchParams = searchParamsFromQuery(location.search);
-  console.log(item.photos);
+  const [imageLoadError, setImageLoadError] = useState(true);
+
+  // const handleImageError = (e) => {
+  //   e.target.src =
+  //     "https://media.istockphoto.com/id/1199906477/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=QRaXTJuDrWe8Mwi-w98RHoy8-TSdbFPaYFeyUqLidds=";
+  //   e.target.style.objectFit = "contain";
+
+  // };
+
   return (
     <Link to={`/hotels/${item._id}?${searchParamsToQuery(searchParams)}`}>
       <div className="search-item">
-        {<img src={item.photos[0]} alt="" className="si-img" /> || (
-          <img
-            src="https://media.istockphoto.com/id/1206575314/vector/image-unavailable-icon.jpg?s=612x612&w=0&k=20&c=7aypXCTzJ42V0xRHJ08Nq1K6fPgY5IB_D4fXbWloX_w="
-            alt=""
-            className="si-img"
-          />
-        )}
+        <img
+          src={item.photos[0]}
+          alt=""
+          className="si-img" /*onError={handleImageError}*/
+          onError={(e) =>
+            imageLoadError
+              ? setImageLoadError(false)
+              : (e.target.src =
+                  "https://media.istockphoto.com/id/1199906477/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=QRaXTJuDrWe8Mwi-w98RHoy8-TSdbFPaYFeyUqLidds=")
+          }
+        />
 
         <div className="si-desc">
           <div className="si-header">

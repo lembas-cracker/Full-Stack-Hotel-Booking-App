@@ -42,15 +42,22 @@ const Hotel = () => {
   };
 
   const handleMove = (direction) => {
+    const numOfPhotos = data.photos.length - 1;
     let newSlideNumber;
 
     if (direction === "l") {
-      newSlideNumber = slideNumber === 0 ? 5 : slideNumber - 1;
+      newSlideNumber = slideNumber === 0 ? numOfPhotos : slideNumber - 1;
     } else {
-      newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
+      newSlideNumber = slideNumber === numOfPhotos ? 0 : slideNumber + 1;
     }
 
     setSlideNumber(newSlideNumber);
+  };
+
+  const handleImageError = (e) => {
+    e.target.src =
+      "https://media.istockphoto.com/id/1199906477/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=QRaXTJuDrWe8Mwi-w98RHoy8-TSdbFPaYFeyUqLidds=";
+    e.target.style.objectFit = "contain";
   };
 
   const handleClick = () => {
@@ -69,7 +76,7 @@ const Hotel = () => {
             <div className="slider">
               <FontAwesomeIcon icon={faCircleXmark} className="close" onClick={() => setOpen(false)} />
               <FontAwesomeIcon icon={faCircleArrowLeft} className="arrow" onClick={() => handleMove("l")} />
-              <div className="slider-wrapper">
+              <div className="slider-wrapper" onClick={() => handleMove("l")}>
                 <img src={data.photos[slideNumber]} alt="" className="slider-img" />
               </div>
               <FontAwesomeIcon icon={faCircleArrowRight} className="arrow" onClick={() => handleMove("r")} />
@@ -90,7 +97,13 @@ const Hotel = () => {
                 <div className="hotel-images">
                   {data.photos?.map((photo, i) => (
                     <div className="hotel-img-wrapper" key={i}>
-                      <img onClick={() => handleOpen(i)} src={photo} alt="" className="hotel-img" />
+                      <img
+                        onClick={() => handleOpen(i)}
+                        src={photo}
+                        alt=""
+                        className="hotel-img"
+                        onError={handleImageError}
+                      />
                     </div>
                   ))}
                 </div>
