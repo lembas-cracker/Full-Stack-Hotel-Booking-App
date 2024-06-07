@@ -1,0 +1,42 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #cdcccc;
+  border-radius: 2px;
+  box-shadow: 1px 1px 3px darkgrey;
+  width: 40%;
+  text-align: center;
+  position: relative;
+  animation: slideIn 0.5s ease-out;
+}
+
+.popup h1 {
+  font-size: 15px;
+  font-weight: light;
+  color: #003580;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%); /* Start position off the top of the screen */
+  }
+  to {
+    transform: translateY(0); /* End position at the final location */
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .popup {
+    width: auto;
+  }
+}
