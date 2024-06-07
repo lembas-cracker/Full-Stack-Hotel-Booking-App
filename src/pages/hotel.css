@@ -47,17 +47,23 @@
 }
 
 .hotel-images {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 10px;
 }
 
 .hotel-img-wrapper {
-  width: 33%;
+  position: relative;
+  flex: 1;
+  height: 150px;
 }
 
 .hotel-img {
   width: 100%;
+  height: 100%;
+  image-rendering: smooth;
   object-fit: cover;
   cursor: pointer;
 }
@@ -127,7 +133,6 @@
 
 .slider-wrapper {
   width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -178,5 +183,10 @@
   }
   .arrow {
     display: none;
+  }
+  .hotel-img-wrapper {
+    max-width: 150px;
+    flex: auto;
+    flex-shrink: 0;
   }
 }

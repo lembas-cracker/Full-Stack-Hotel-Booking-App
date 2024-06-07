@@ -24,18 +24,22 @@
 }
 
 .nav-button {
-  margin-left: 20px;
-  font-size: 15px;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
-  border-radius: 2px;
-  padding: 6px 12px;
+  margin-left: 10px;
+  font-size: 13px;
+  /*font-family: "font-family: Verdana, Arial, Helvetica, sans-serif";*/
+  border-radius: 5px;
+  border: 1px solid #003580;
+  padding: 8px 12px;
   cursor: pointer;
-  color: #0071c2;
+  color: white;
+  background-color: #006ce4;
+  letter-spacing: 0.6px;
 }
 
 @media screen and (max-width: 1024px) {
   .nav-container {
     padding: 10px 10px 0 10px;
+    align-items: center;
   }
   .navbar {
     height: auto;

@@ -9,6 +9,7 @@
 .home-title {
   max-width: 1024px;
   font-size: 20px;
+  color: black;
 }
 
 @media screen and (max-width: 1024px) {

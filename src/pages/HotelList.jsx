@@ -1,7 +1,7 @@
 import "./hotel-list.css";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { format } from "date-fns";
@@ -16,42 +16,6 @@ import { searchParamsFromQuery, searchParamsToQuery } from "../context/SearchCon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
-// High-level description:
-
-// The search form should never cause the search results to change,
-// until the user explicitly submits the form - either by
-// clicking "submit" or pressing Enter in any input.
-
-// This means that the API request for getting search results
-// should depend on variables that never change until
-// the form is submitted.
-
-// Solution description:
-
-// All form fields should change local state variables that
-// are not directly used in the API request.
-
-// On submit, the API request params should all be updated.
-// This means:
-// - `setMin` and `setMax` should be called at this point, using
-// the latest values saved in form state variables.
-// - Destination should be saved into the current page URL, so that
-// on the next render it's picked up from `locationParams.destination`
-// and used for the API request due to that.
-
-// Before the form is submitted, those things should not happen.
-// This means:
-// - `setMin` and `setMax` should not be called in input event
-// handlers. Instead, use intermediate state variables, `formMin`
-// and `formMax.
-// - Destination should not be saved into the page URL until the
-// form is submitted. Instead, store the input field in an
-// intermediate state variable.
-
-// It might be easier to implement the second part first, i.e.
-// set up the form variables and change the event handlers,
-// and only then set up the submit handler as described above.
-
 const HotelList = () => {
   const location = useLocation();
   const locationParams = searchParamsFromQuery(location.search);
@@ -59,7 +23,9 @@ const HotelList = () => {
 
   const destination = locationParams.destination;
   const options = locationParams.options;
-  const dates = locationParams.dates;
+  const dates = locationParams.dates?.length
+    ? locationParams.dates
+    : [{ startDate: new Date(), endDate: new Date(), key: "selection" }];
   const navigate = useNavigate();
   const setDates = (dates) => navigate(`/hotels?${searchParamsToQuery({ destination, options, dates })}`);
 
@@ -149,7 +115,7 @@ const HotelList = () => {
                   <FontAwesomeIcon icon={faMagnifyingGlass} className="magnifying-icon" />
                   No properties found in this destination.
                 </span>
-                <span style={{ padding: "0 0 10px" }}>Check out other properties:</span>
+                <span style={{ padding: "0 0 12px 12px" }}>Check out other properties:</span>
                 {dataRandom?.map((item) => (
                   <SearchItem item={item} key={item._id} />
                 ))}

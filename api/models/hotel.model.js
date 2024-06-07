@@ -23,7 +23,7 @@ const HotelSchema = new Schema({
     required: true,
   },
   photos: {
-    type: [String],
+    type: [Object],
   },
   title: {
     type: String,

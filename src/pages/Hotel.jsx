@@ -12,6 +12,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { searchParamsFromQuery } from "../context/SearchContext";
 import { AuthContext } from "../context/AuthContext";
 import Reserve from "../components/Reserve";
+import LoadingIndicator from "../components/LoadingIndicator";
+import ImageComponent from "../components/ImageComponent";
+import PopUpMessage from "../components/PopUpMessage";
 
 const Hotel = () => {
   const location = useLocation();
@@ -19,12 +22,12 @@ const Hotel = () => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [isPopoupOpen, setIsPopupOpen] = useState(false);
+  const navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext);
 
   const { data, loading, error } = useFetch(API_BASE_URL + `/hotels/find/${hotel_id}`);
-
   const { dates, options } = searchParamsFromQuery(location.search);
-  const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   const milisecondsPerDay = 1000 * 60 * 60 * 24;
   const dayDifference = (date1, date2) => {
@@ -36,11 +39,13 @@ const Hotel = () => {
   // If you open this hotel's page without query params, we show price for 1 day by default.
   const totalDays = dates.length === 0 ? 1 : dayDifference(dates[0].endDate, dates[0].startDate);
 
+  // Handling opening the slider when clicked on a specific image
   const handleOpen = (i) => {
     setSlideNumber(i);
     setOpen(true);
   };
 
+  // Image slider logic
   const handleMove = (direction) => {
     const numOfPhotos = data.photos.length - 1;
     let newSlideNumber;
@@ -50,27 +55,20 @@ const Hotel = () => {
     } else {
       newSlideNumber = slideNumber === numOfPhotos ? 0 : slideNumber + 1;
     }
-
     setSlideNumber(newSlideNumber);
   };
 
+  // Check if user is authenticated if not then redirect to login page
   const handleClick = () => {
-    user ? setOpenModal(true) : navigate("/login");
+    currentUser ? setOpenModal(true) : navigate("/login");
   };
-
-  const FALLBACK_IMAGE_URL =
-    "https://media.istockphoto.com/id/1199906477/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=QRaXTJuDrWe8Mwi-w98RHoy8-TSdbFPaYFeyUqLidds=";
-
-  // Array of booleans, one per hotel photo, whether a specific photo has failed to load.
-  // Should probably be factored out into a separate image component.
-  const [shouldUseFallbackImage, setUseFallbackImage] = useState([]);
 
   return (
     <div>
       <Navbar />
       <Header type="list" />
       {loading ? (
-        "Loading"
+        <LoadingIndicator />
       ) : (
         <div className="hotel-container">
           {open && (
@@ -78,7 +76,7 @@ const Hotel = () => {
               <FontAwesomeIcon icon={faCircleXmark} className="close" onClick={() => setOpen(false)} />
               <FontAwesomeIcon icon={faCircleArrowLeft} className="arrow" onClick={() => handleMove("l")} />
               <div className="slider-wrapper" onClick={() => handleMove("l")}>
-                <img src={data.photos[slideNumber]} alt="" className="slider-img" />
+                <img src={data.photos[slideNumber].fullImage} alt="" className="slider-img" />
               </div>
               <FontAwesomeIcon icon={faCircleArrowRight} className="arrow" onClick={() => handleMove("r")} />
             </div>
@@ -98,22 +96,11 @@ const Hotel = () => {
                 <div className="hotel-images">
                   {data.photos?.map((photo, i) => (
                     <div className="hotel-img-wrapper" key={i}>
-                      <img
+                      <ImageComponent
                         onClick={() => handleOpen(i)}
-                        src={shouldUseFallbackImage[i] ? FALLBACK_IMAGE_URL : photo}
-                        alt=""
+                        src={photo.fullImage}
+                        hash={photo.previewImage}
                         className="hotel-img"
-                        onError={() => {
-                          if (!shouldUseFallbackImage[i]) {
-                            setUseFallbackImage((shouldUseFallbackImage) => {
-                              // Set this particular photo to use the fallback image.
-                              // Should probably be factored out into a separate image component.
-                              const newShouldUseFallbackImage = [...shouldUseFallbackImage];
-                              newShouldUseFallbackImage[i] = true;
-                              return newShouldUseFallbackImage;
-                            });
-                          }
-                        }}
                       />
                     </div>
                   ))}
@@ -135,7 +122,17 @@ const Hotel = () => {
           <Footer />
         </div>
       )}
-      {openModal && <Reserve setOpen={setOpenModal} hotelId={hotel_id} />}
+      {openModal && <Reserve setOpen={setOpenModal} hotelId={hotel_id} onReserveSuccess={() => setIsPopupOpen(true)} />}
+      {isPopoupOpen && (
+        <PopUpMessage
+          text="Congrats! You made a reservation!"
+          duration={2000}
+          onDone={() => {
+            setIsPopupOpen(false);
+            navigate("/");
+          }}
+        />
+      )}
     </div>
   );
 };

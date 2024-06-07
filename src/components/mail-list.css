@@ -8,6 +8,7 @@
   align-items: center;
   gap: 20px;
   padding: 50px 0;
+  box-shadow: 1px 1px 5px #445f85;
 }
 
 .mail-input-container > input {
@@ -32,6 +33,7 @@
 @media screen and (max-width: 1024px) {
   .mail {
     padding: 0 0px 20px 0;
+    width: calc(100% + 40px);
   }
   .mail-title {
     font-size: 23px;
@@ -39,8 +41,6 @@
   }
   .mail-desc {
     font-size: 14px;
-  }
-  .mail-input-container {
   }
   .mail-input-container > input {
     max-width: 200px;

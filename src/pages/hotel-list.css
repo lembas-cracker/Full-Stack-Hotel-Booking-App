@@ -19,6 +19,7 @@
   position: sticky;
   top: 10px;
   height: max-content;
+  box-shadow: 1px 1px 5px slategray;
 }
 
 .list-result {
@@ -71,6 +72,8 @@
 
 .list-option-input {
   width: 50px;
+  border: 0;
+  padding: 5px;
 }
 
 .list-search > button {
@@ -88,13 +91,17 @@
 }
 
 .search-not-found {
-  padding: 0 0 15px;
+  padding: 0 0 12px 12px;
   font-weight: bold;
 }
 
 .random-search {
   display: flex;
   flex-direction: column;
+}
+
+.date-picker {
+  color: #555;
 }
 
 @media screen and (max-width: 1024px) {
@@ -110,5 +117,19 @@
   }
   .list-options {
     padding: 0;
+  }
+  .list-option-item {
+    gap: 10px;
+  }
+
+  .list-option-text {
+    background-color: white;
+    padding: 10px;
+    width: -webkit-fill-available;
+  }
+  .list-item .rdrCalendarWrapper {
+    position: absolute;
+    max-width: fit-content;
+    top: 290px;
   }
 }

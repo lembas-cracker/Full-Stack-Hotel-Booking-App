@@ -5,7 +5,7 @@ import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import useFetch from "../useFetchHook";
 import { API_BASE_URL } from "../api";
 import { searchParamsFromQuery } from "../context/SearchContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 const Reserve = (props) => {
@@ -43,8 +43,6 @@ const Reserve = (props) => {
     setSelectedRooms(checked ? [...selectedRooms, value] : selectedRooms.filter((item) => item !== value));
   };
 
-  const navigate = useNavigate();
-
   const handleClick = async () => {
     try {
       await Promise.all(
@@ -53,8 +51,8 @@ const Reserve = (props) => {
           return res.data;
         })
       );
+      props.onReserveSuccess();
       props.setOpen(false);
-      navigate("/");
     } catch (error) {}
   };
 
@@ -63,8 +61,8 @@ const Reserve = (props) => {
       <div className="reserve-container">
         <FontAwesomeIcon icon={faCircleXmark} className="reserve-close" onClick={() => props.setOpen(false)} />
         <span>Select your rooms:</span>
-        {data.map((item) => (
-          <div className="reserve-item">
+        {data?.map((item) => (
+          <div className="reserve-item" key={item._id}>
             <div className="reserve-item-info">
               <div className="reserve-title">{item.title}</div>
               <div className="reserve-desc">{item.desc}</div>

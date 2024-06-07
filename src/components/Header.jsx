@@ -9,10 +9,11 @@ import {
   faPlane,
   faTaxi,
 } from "@fortawesome/free-solid-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import "./header.css";
 import { DateRange } from "react-date-range";
 import { useState, useRef, useCallback, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { format } from "date-fns";
@@ -23,13 +24,7 @@ import { AuthContext } from "../context/AuthContext";
 const Header = ({ type }) => {
   const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
-  const [dates, setDates] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
+  const [dates, setDates] = useState([{ startDate: new Date(), endDate: new Date(), key: "selection" }]);
 
   const [openOptions, setOpenOptions] = useState(false);
   const [options, setOptions] = useState({
@@ -103,11 +98,13 @@ const Header = ({ type }) => {
           {/* if component is not HotelList then show the full landing page header and the search */}
           {type !== "list" && (
             <>
-              <h1 className="header-title">A lifetime of discounts? Genius!</h1>
-              <p className="header-description">
-                Get rewarded for your travels – unlock instant savings of 10% or more with a free Bookit account
-              </p>
-              {!user && <button className="header-signIn-btn">Sign in / Register</button>}
+              <h1 className="header-title">
+                Portfolio full-stack React.js project: test-mode Booking.com clone by Ksenia Agalakova
+              </h1>
+              <a href="https://github.com/lembas-cracker/Full-stack-hotel-booking-app" className="header-description">
+                <FontAwesomeIcon icon={faGithub} className="header-github" />
+                lembas-cracker/Full-stack-hotel-booking-app
+              </a>
             </>
           )}
         </div>
@@ -125,12 +122,14 @@ const Header = ({ type }) => {
                 onKeyDown={(e) => handleSearchKeydown(e)}
               />
             </div>
-            <div className="header-search-item" ref={dateRef} onClick={() => setOpenDate(true)}>
-              <FontAwesomeIcon icon={faCalendarDays} className="header-icon" />
-              <span className="header-search-text">{`${format(dates[0].startDate, "MM/dd/yyyy")} to ${format(
-                dates[0].endDate,
-                "MM/dd/yyyy"
-              )}`}</span>
+            <div className="header-search-item" ref={dateRef}>
+              <div className="header-search-date" onClick={() => setOpenDate(!openDate)}>
+                <FontAwesomeIcon icon={faCalendarDays} className="header-icon" />
+                <span className="header-search-text">{`${format(dates[0].startDate, "MM/dd/yyyy")} to ${format(
+                  dates[0].endDate,
+                  "MM/dd/yyyy"
+                )}`}</span>
+              </div>
               {openDate && (
                 <div className="date">
                   <DateRange
