@@ -1,37 +1,25 @@
 import { Link, useLocation } from "react-router-dom";
 import { searchParamsFromQuery, searchParamsToQuery } from "../context/SearchContext";
 import "./search-item.css";
-import { useState } from "react";
-
-const FALLBACK_IMAGE_URL =
-  "https://media.istockphoto.com/id/1199906477/vector/image-unavailable-icon.jpg?s=170667a&w=0&k=20&c=QRaXTJuDrWe8Mwi-w98RHoy8-TSdbFPaYFeyUqLidds=";
+import ImageComponent from "./ImageComponent";
 
 const SearchItem = ({ item }) => {
   const location = useLocation();
   const searchParams = searchParamsFromQuery(location.search);
-  const [shouldUseFallbackImage, setUseFallbackImage] = useState(false);
+  const fullImg = Object.values(item.photos[0])[0];
+  const previewImg = Object.values(item.photos[0])[1];
 
   return (
     <Link to={`/hotels/${item._id}?${searchParamsToQuery(searchParams)}`}>
       <div className="search-item">
-        <img
-          src={shouldUseFallbackImage ? FALLBACK_IMAGE_URL : item.photos[0]}
-          alt=""
-          className={"si-img"}
-          style={shouldUseFallbackImage ? { objectFit: "contain" } : {}}
-          onError={() => {
-            if (!shouldUseFallbackImage) {
-              setUseFallbackImage(true);
-            }
-          }}
-        />
+        <ImageComponent src={fullImg} hash={previewImg} className={"si-img"} />
 
         <div className="si-desc">
           <div className="si-header">
             <h1 className="si-title">{item.name}</h1>
             {item.rating ? (
               <div className="si-rating">
-                <span>Excellent</span>
+                <span className="si-rating-text">Excellent</span>
                 <button>{item.rating}</button>
               </div>
             ) : (

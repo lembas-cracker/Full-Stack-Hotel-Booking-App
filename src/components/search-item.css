@@ -32,6 +32,8 @@ a {
   width: 200px;
   height: auto;
   object-fit: cover;
+  box-shadow: 0 1px 3px slategray;
+  border-radius: 5px;
 }
 
 .si-desc {
@@ -58,6 +60,7 @@ a {
   width: max-content;
   padding: 3px;
   border-radius: 5px;
+  box-shadow: 1px 1px 5px 0 slategray;
 }
 
 .si-subtitle {
@@ -88,15 +91,16 @@ a {
 }
 
 .si-rating > span {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .si-rating > button {
   background-color: #003580;
   color: white;
-  padding: 5px;
+
   font-weight: bold;
   border: none;
+  box-shadow: 1px 1px 3px gray;
 }
 
 .si-detail-texts {
@@ -124,6 +128,7 @@ a {
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  box-shadow: 0 1px 5px slategray;
 }
 
 @media screen and (max-width: 1024px) {
@@ -137,10 +142,24 @@ a {
   .si-subtitle {
     display: none;
   }
+  .si-features {
+    overflow-x: auto;
+  }
   .search-item {
     gap: 10px;
+    max-height: 60vh;
+    line-height: 1.5;
+  }
+  .si-details {
+    justify-content: end;
   }
   .si-detail-texts {
     align-items: flex-end;
+  }
+  .si-rating {
+    align-self: start;
+  }
+  .si-rating-text {
+    display: none;
   }
 }

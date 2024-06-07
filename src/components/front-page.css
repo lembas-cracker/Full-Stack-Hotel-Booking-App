@@ -1,4 +1,5 @@
 .front-page {
+  width: calc(100% - 40px);
   max-width: 1024px;
   display: flex;
   justify-content: space-between;
@@ -9,10 +10,12 @@
 
 .front-page-item {
   position: relative;
+  flex: 1;
   color: white;
   border-radius: 10px;
   overflow: hidden;
   height: 250px;
+  box-shadow: 1px 1px 3px slategray;
 }
 
 .front-page-img {
@@ -32,10 +35,12 @@
   .front-page {
     overflow-x: auto;
     padding: 0;
+    width: auto;
   }
   .front-page-item {
-    flex-shrink: 0;
     max-width: 300px;
+    flex: auto;
+    flex-shrink: 0;
   }
 
   .front-page::-webkit-scrollbar-track {

@@ -3,6 +3,8 @@ import useFetch from "../useFetchHook";
 import "./popular-properties.css";
 import { Link, useLocation } from "react-router-dom";
 import { searchParamsFromQuery, searchParamsToQuery } from "../context/SearchContext";
+import ImageComponent from "./ImageComponent";
+import LoadingIndicator from "./LoadingIndicator";
 
 const PopularProperties = () => {
   const location = useLocation();
@@ -12,15 +14,19 @@ const PopularProperties = () => {
   return (
     <div className="popular">
       {loading ? (
-        "Loading"
+        <LoadingIndicator />
       ) : (
         <>
           {data?.map((item) => (
             <div className="popular-item" key={item._id}>
               <Link to={`/hotels/${item._id}?${searchParamsToQuery(searchParams)}`}>
-                <span className="popular-img-container">
-                  <img src={item.photos[0]} alt="" className="popular-img" />
-                </span>
+                <div className="popular-img-container">
+                  <ImageComponent
+                    src={Object.values(item.photos[0])[0]}
+                    hash={Object.values(item.photos[0])[1]}
+                    className="popular-img"
+                  />
+                </div>
               </Link>
               <span className="popular-name">{item.name}</span>
               <span className="popular-city">{item.city}</span>
