@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import "./login.css";
-import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { API_BASE_URL } from "../api";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
-const Login = () => {
+const Register = () => {
   const [credentials, setCredentials] = useState({
     username: undefined,
     email: undefined,
@@ -23,7 +23,7 @@ const Login = () => {
     e.preventDefault();
     dispatch({ type: "AUTH_START" });
     try {
-      const res = await axios.post(API_BASE_URL + "/auth/login", credentials);
+      const res = await axios.post(API_BASE_URL + "/auth/register", credentials);
       dispatch({ type: "AUTH_SUCCESS", payload: res.data.details });
       navigate("/");
     } catch (error) {
@@ -35,9 +35,10 @@ const Login = () => {
     <div className="login">
       <form onSubmit={handleClick} className="login-container">
         <input type="text" className="login-input" id="username" placeholder="Username" onChange={handleChange} />
+        <input type="text" className="login-input" id="email" placeholder="Email" onChange={handleChange} />
         <input type="password" className="login-input" id="password" placeholder="Password" onChange={handleChange} />
         <button disabled={loading} className="login-button" type="submit">
-          Log In
+          Register
         </button>
         {error && <span>{error.message}</span>}
       </form>
@@ -45,4 +46,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
