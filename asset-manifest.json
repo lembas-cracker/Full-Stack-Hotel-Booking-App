@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Full-stack-hotel-booking-app/static/css/main.38ce4ded.css",
-    "main.js": "/Full-stack-hotel-booking-app/static/js/main.b3e459db.js",
+    "main.css": "/Full-stack-hotel-booking-app/static/css/main.9e37a2cd.css",
+    "main.js": "/Full-stack-hotel-booking-app/static/js/main.33414ce5.js",
     "index.html": "/Full-stack-hotel-booking-app/index.html",
-    "main.38ce4ded.css.map": "/Full-stack-hotel-booking-app/static/css/main.38ce4ded.css.map",
-    "main.b3e459db.js.map": "/Full-stack-hotel-booking-app/static/js/main.b3e459db.js.map"
+    "main.9e37a2cd.css.map": "/Full-stack-hotel-booking-app/static/css/main.9e37a2cd.css.map",
+    "main.33414ce5.js.map": "/Full-stack-hotel-booking-app/static/js/main.33414ce5.js.map"
   },
   "entrypoints": [
-    "static/css/main.38ce4ded.css",
-    "static/js/main.b3e459db.js"
+    "static/css/main.9e37a2cd.css",
+    "static/js/main.33414ce5.js"
   ]
 }
